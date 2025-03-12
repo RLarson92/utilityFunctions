@@ -78,3 +78,23 @@ data <- as.data.frame(data)
 # AND THEN, we'll join the metadata (site names, days active) to the dataframe
 data <- right_join(tmp, data)
 data <- as.data.frame(data)
+# let's replace the non-detections (which are NA's) to 0's
+data[is.na(data)] <- 0
+# and then add back in the true NA's (missing data)
+data$n[data$daysActive < 1] <- NA
+# I like to re-name the columns to match with the code I typically use for my 
+# models. "Season" = season/sample period; "site" = site name; "J" = # of 
+# sampling days for that season at that site; "species" = species name; and
+# "Y" = number of detections during that season
+# also trimming up a couple of the columns
+colnames(data) <- c("season","site","J","species","Y")
+data$season <- strtrim(data$season, 4)
+J <- ceiling(J)
+# put the data in the correct order and clean up the environment. you're done!
+data <- data[order(
+  data[,"species"],
+  data[,"season"],
+  data[,"site"]),]
+rm(c, tmp, tmp1, tmp2, dat)
+# enjoy your long-form Wildlife Insights detection/nondetection data in the
+# occupancy model of your choosing
