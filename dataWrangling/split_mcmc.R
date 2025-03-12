@@ -1,3 +1,10 @@
+# I cannot take credit for this function; it belongs to Mason Fidino (@mfidino)
+#
+# a function to split the output of an mcmc model into its constituent parts.
+# For example, if you run a model with an intercept and two coefficients, and 
+# have 3 mcmc chains going, the results will be stored per chain. this code
+# combines the chains and creates one array per model component. This makes the
+# model output much easier to work with to predict across covariates ranges.
 split_mcmc <- function(x){
   # get parameter names
   pars <- colnames(x)
